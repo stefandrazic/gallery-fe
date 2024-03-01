@@ -12,4 +12,12 @@ export default class GalleriesService extends HttpService {
     });
     return { data: response.data, metadata: response.metadata };
   }
+
+  static async getSingle(id) {
+    const response = await this.request({
+      method: "GET",
+      url: `/galleries/${id}`,
+    });
+    return response?.data;
+  }
 }
