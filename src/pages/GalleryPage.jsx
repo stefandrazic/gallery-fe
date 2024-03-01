@@ -39,7 +39,7 @@ export default function Gallery() {
 
   return (
     <>
-      <Container>
+      <Container className="mt-2">
         <h2>Gallery name: {gallery.name}</h2>
         <h4>
           Author:{" "}

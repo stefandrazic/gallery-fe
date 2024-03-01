@@ -16,6 +16,12 @@ export default function NavbarComponent() {
           <Nav.Link as={Link} to={"/create"}>
             Create Gallery
           </Nav.Link>
+          <Nav.Link as={Link} to={"/login"}>
+            Login
+          </Nav.Link>
+          <Nav.Link as={Link} to={"/register"}>
+            Register
+          </Nav.Link>
         </Nav>
       </Container>
     </Navbar>

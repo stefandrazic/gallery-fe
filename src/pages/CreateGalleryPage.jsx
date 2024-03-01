@@ -62,7 +62,7 @@ export default function CreateGalleryPage() {
   };
 
   return (
-    <Container>
+    <Container className="mt-2">
       <h1>Create Gallery</h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
@@ -134,7 +134,7 @@ export default function CreateGalleryPage() {
         </Form.Group>
 
         <Button variant="primary" type="submit">
-          Submit
+          Create
         </Button>
         <Button variant="secondary">Cancel</Button>
       </Form>

@@ -32,7 +32,7 @@ export default function Galleries() {
   };
 
   return (
-    <Container>
+    <Container className="mt-2">
       {galleries?.map((gallery) => {
         return (
           <div key={gallery.id}>
