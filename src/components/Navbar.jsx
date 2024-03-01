@@ -13,6 +13,9 @@ export default function NavbarComponent() {
           <Nav.Link as={Link} to={"/"}>
             All Galleries
           </Nav.Link>
+          <Nav.Link as={Link} to={"/create"}>
+            Create Gallery
+          </Nav.Link>
         </Nav>
       </Container>
     </Navbar>

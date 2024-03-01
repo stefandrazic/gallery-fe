@@ -20,4 +20,13 @@ export default class GalleriesService extends HttpService {
     });
     return response?.data;
   }
+
+  static async create(data) {
+    const response = await this.request({
+      method: "POST",
+      url: "/galleries",
+      data,
+    });
+    return response?.data;
+  }
 }
