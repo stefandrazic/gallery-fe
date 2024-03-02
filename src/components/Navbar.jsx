@@ -6,7 +6,7 @@ import { useAuth } from "../context/auth";
 
 export default function NavbarComponent() {
   const navigate = useNavigate();
-  const { authToken, setLogin, setLogout } = useAuth();
+  const { authToken, setLogout } = useAuth();
 
   const logout = async () => {
     try {
@@ -32,18 +32,27 @@ export default function NavbarComponent() {
           <Nav.Link as={Link} to={"/"}>
             All Galleries
           </Nav.Link>
-          <Nav.Link as={Link} to={"/create"}>
-            Create Gallery
-          </Nav.Link>
-          <Nav.Link as={Link} to={"/login"}>
-            Login
-          </Nav.Link>
-          <Nav.Link as={Link} to={"/register"}>
-            Register
-          </Nav.Link>
-          <Nav.Link as={Button} onClick={() => logout()}>
-            Logout
-          </Nav.Link>
+          {authToken && (
+            <Nav.Link as={Link} to={"/create"}>
+              Create Gallery
+            </Nav.Link>
+          )}
+          {!authToken && (
+            <>
+              <Nav.Link as={Link} to={"/login"}>
+                Login
+              </Nav.Link>
+              <Nav.Link as={Link} to={"/register"}>
+                Register
+              </Nav.Link>
+            </>
+          )}
+
+          {authToken && (
+            <Nav.Link as={Button} onClick={() => logout()}>
+              Logout
+            </Nav.Link>
+          )}
         </Nav>
       </Container>
     </Navbar>
