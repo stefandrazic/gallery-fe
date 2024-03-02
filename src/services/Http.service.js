@@ -20,9 +20,6 @@ export default class HttpService {
       data,
       params,
       headers,
-      // headers: {
-      //   // Authorization: "Bearer " + localStorage.getItem("token"),
-      // },
     });
     return response?.data;
   }

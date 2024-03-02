@@ -3,7 +3,6 @@ import { useAuth } from "../context/auth";
 
 const PrivateRoutes = () => {
   const { authToken } = useAuth();
-  console.log(authToken);
 
   // Your authentication logic goes here...
 

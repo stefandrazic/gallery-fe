@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, redirect, useParams } from "react-router-dom";
 import useGallery from "../hooks/useGallery";
-import { Carousel, Container, Image } from "react-bootstrap";
+import { Button, Carousel, Container, Image } from "react-bootstrap";
 import NotFound from "./NotFound";
 import Loading from "../components/Loading";
+import { useAuth } from "../context/auth";
 
 export default function Gallery() {
   const { id } = useParams();
   const { gallery, images } = useGallery(id);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -48,7 +50,16 @@ export default function Gallery() {
       </h4>
       <h5>Created at: {String(time)}</h5>
       <h5>Description: {gallery.description}</h5>
-      <Carousel activeIndex={index} onSelect={handleSelect}>
+      {user && user.id === gallery.author.id ? (
+        <>
+          <Button variant="info">Edit</Button>
+          <Button variant="danger">Delete</Button>
+        </>
+      ) : (
+        ""
+      )}
+
+      <Carousel className="mt-2" activeIndex={index} onSelect={handleSelect}>
         {images?.map((img, i) => {
           return (
             <Carousel.Item key={i}>
@@ -56,7 +67,7 @@ export default function Gallery() {
                 style={{
                   position: "relative",
                   width: "100%",
-                  height: "70vh",
+                  height: "60vh",
                 }}
               >
                 <Link to={img} target="_blank">

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, Container, Form } from "react-bootstrap";
 import useQuery from "../hooks/useQuery";
 import useGalleries from "../hooks/useGalleries";
 import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
+import GalleryCard from "../components/GalleryCard";
 
 export default function Galleries() {
   const query = useQuery();
@@ -33,17 +34,34 @@ export default function Galleries() {
 
   return (
     <Container className="mt-2">
-      {galleries?.map((gallery) => {
-        return (
-          <div key={gallery.id}>
-            <Link to={`/galleries/${gallery.id}`}>{gallery.name}</Link>
-            <p>{gallery.description}</p>
-            {/* Render other gallery data as needed */}
-          </div>
-        );
-      })}
+      <Container
+        className="mb-3 mt-3"
+        style={{ display: "flex", gap: "0.5rem" }}
+      >
+        <Form.Control size="lg" type="text" placeholder="Search" />
+        <Button variant="success">Search</Button>
+      </Container>
+      <Container
+        className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mx-auto"
+        style={{ gap: "1rem" }}
+      >
+        {galleries?.map((gallery) => {
+          return (
+            <GalleryCard
+              key={gallery.id}
+              id={gallery.id}
+              name={gallery.name}
+              author={gallery.author}
+              created_at={gallery.created_at}
+              img_url={gallery.img_urls.split(",")[0]}
+            />
+          );
+        })}
+      </Container>
       {metadata.total > galleries.length && ( // Render the "Load more" button conditionally
-        <Button onClick={loadMoreGalleries}>Load more</Button>
+        <Container className="d-flex justify-content-center mt-3">
+          <Button onClick={loadMoreGalleries}>Load more</Button>
+        </Container>
       )}
     </Container>
   );

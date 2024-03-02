@@ -6,7 +6,7 @@ import { useAuth } from "../context/auth";
 
 export default function NavbarComponent() {
   const navigate = useNavigate();
-  const { authToken, setLogout } = useAuth();
+  const { authToken, setLogout, user } = useAuth();
 
   const logout = async () => {
     try {
@@ -28,6 +28,7 @@ export default function NavbarComponent() {
         <Navbar.Brand as={Link} to={"/"}>
           Galleries
         </Navbar.Brand>
+
         <Nav className="me-auto">
           <Nav.Link as={Link} to={"/"}>
             All Galleries
@@ -37,6 +38,8 @@ export default function NavbarComponent() {
               Create Gallery
             </Nav.Link>
           )}
+        </Nav>
+        <Nav>
           {!authToken && (
             <>
               <Nav.Link as={Link} to={"/login"}>
