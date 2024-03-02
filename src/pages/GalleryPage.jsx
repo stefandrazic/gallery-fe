@@ -38,46 +38,44 @@ export default function Gallery() {
   const time = new Date(gallery.created_at).toJSON().slice(0, 10);
 
   return (
-    <>
-      <Container className="mt-2">
-        <h2>Gallery name: {gallery.name}</h2>
-        <h4>
-          Author:{" "}
-          <Link to={"/"}>
-            {gallery.author.first_name + " " + gallery.author.last_name}
-          </Link>
-        </h4>
-        <h5>Created at: {String(time)}</h5>
-        <h5>Description: {gallery.description}</h5>
-        <Carousel activeIndex={index} onSelect={handleSelect}>
-          {images?.map((img, i) => {
-            return (
-              <Carousel.Item key={i}>
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    height: "70vh",
-                  }}
-                >
-                  <Link to={img} target="_blank">
-                    <Image
-                      src={img}
-                      style={{
-                        objectFit: "cover",
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: "5px",
-                      }}
-                      rounded
-                    />
-                  </Link>
-                </div>
-              </Carousel.Item>
-            );
-          })}
-        </Carousel>
-      </Container>
-    </>
+    <Container className="mt-2">
+      <h2>Gallery name: {gallery.name}</h2>
+      <h4>
+        Author:{" "}
+        <Link to={"/"}>
+          {gallery.author.first_name + " " + gallery.author.last_name}
+        </Link>
+      </h4>
+      <h5>Created at: {String(time)}</h5>
+      <h5>Description: {gallery.description}</h5>
+      <Carousel activeIndex={index} onSelect={handleSelect}>
+        {images?.map((img, i) => {
+          return (
+            <Carousel.Item key={i}>
+              <div
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  height: "70vh",
+                }}
+              >
+                <Link to={img} target="_blank">
+                  <Image
+                    src={img}
+                    style={{
+                      objectFit: "cover",
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: "5px",
+                    }}
+                    rounded
+                  />
+                </Link>
+              </div>
+            </Carousel.Item>
+          );
+        })}
+      </Carousel>
+    </Container>
   );
 }

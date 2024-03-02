@@ -13,9 +13,16 @@ export default class AuthService extends HttpService {
       method: "POST",
       url: `/login`,
       data,
-      // headers: {
-      //   Authorization: "Bearer " + localStorage.getItem("token"),
-      // },
+    });
+  }
+
+  static async logout() {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+
+    return await this.request({
+      method: "POST",
+      url: "/logout",
     });
   }
 }

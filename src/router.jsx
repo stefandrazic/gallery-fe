@@ -13,8 +13,8 @@ export default function router() {
       <Route path="/" index element={<GalleriesPage />} />
       <Route path="/galleries/:id" element={<GalleryPage />} />
       <Route path="/create" element={<CreateGalleryPage />} />
-      <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<LoginPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

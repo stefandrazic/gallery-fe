@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import AuthService from "../../services/auth.service";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/auth";
 const DEFAULT_DATA = {
   email: "",
   password: "",
@@ -13,6 +14,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState(DEFAULT_DATA);
   const [errors, setErrors] = useState(DEFAULT_DATA);
+  const { authToken, setLogin, setLogout } = useAuth();
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -24,6 +26,7 @@ export default function LoginPage() {
         setFormData(DEFAULT_DATA);
         localStorage.setItem("user", JSON.stringify(response.user));
         localStorage.setItem("token", response.token);
+        setLogin(response.token);
         navigate("/");
       }
     } catch (error) {
