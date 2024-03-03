@@ -1,15 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
 import GalleriesService from "../services/galleries.service";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../context/auth";
 
 export default function CreateGalleryPage() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     img_urls: [""],
   });
+
+  useEffect(() => {
+    if (id) {
+      fetchGalleryData(id);
+    }
+  }, [id]);
+
+  const fetchGalleryData = async (galleryId) => {
+    try {
+      const response = await GalleriesService.getSingle(galleryId);
+      const { name, description, img_urls, author } = response;
+
+      if (author.id === user.id) {
+        setFormData({ name, description, img_urls: img_urls.split(",") });
+        return response;
+      } else {
+        console.log("This is not your gallery!");
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleAddUrl = () => {
     setFormData({ ...formData, img_urls: [...formData.img_urls, ""] });
@@ -53,9 +79,15 @@ export default function CreateGalleryPage() {
     };
 
     try {
-      const response = await GalleriesService.create(newData);
-      console.log(response);
-      if (response) navigate("/");
+      if (id && user.id) {
+        const response = await GalleriesService.edit(id, newData);
+        console.log(response);
+        console.log(newData);
+      } else {
+        const response = await GalleriesService.create(newData);
+        console.log(response);
+      }
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +95,7 @@ export default function CreateGalleryPage() {
 
   return (
     <Container className="mt-2">
-      <h1>Create Gallery</h1>
+      {id ? <h1>Edit gallery</h1> : <h1>Create Gallery</h1>}
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Name</Form.Label>

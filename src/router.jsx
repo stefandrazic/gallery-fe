@@ -22,6 +22,7 @@ export default function router() {
 
       <Route element={<PrivateRoutes />}>
         <Route path="/create" element={<CreateGalleryPage />} />
+        <Route path="/edit/:id" element={<CreateGalleryPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

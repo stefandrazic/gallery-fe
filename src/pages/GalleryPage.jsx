@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link, redirect, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import useGallery from "../hooks/useGallery";
 import { Button, Carousel, Container, Image } from "react-bootstrap";
 import NotFound from "./NotFound";
 import Loading from "../components/Loading";
 import { useAuth } from "../context/auth";
+import GalleriesService from "../services/galleries.service";
 
 export default function Gallery() {
   const { id } = useParams();
@@ -12,6 +13,7 @@ export default function Gallery() {
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -37,6 +39,16 @@ export default function Gallery() {
     return <NotFound />;
   }
 
+  const deleteGallery = async (id) => {
+    try {
+      const response = await GalleriesService.delete(id);
+      console.log(response);
+      if (response) navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const time = new Date(gallery.created_at).toJSON().slice(0, 10);
 
   return (
@@ -44,7 +56,7 @@ export default function Gallery() {
       <h2>Gallery name: {gallery.name}</h2>
       <h4>
         Author:{" "}
-        <Link to={"/"}>
+        <Link style={{ textDecoration: "none", color: "purple" }} to={"/"}>
           {gallery.author.first_name + " " + gallery.author.last_name}
         </Link>
       </h4>
@@ -52,8 +64,17 @@ export default function Gallery() {
       <h5>Description: {gallery.description}</h5>
       {user && user.id === gallery.author.id ? (
         <>
-          <Button variant="info">Edit</Button>
-          <Button variant="danger">Delete</Button>
+          <Link to={`/edit/${gallery.id}`}>
+            <Button variant="info">Edit</Button>
+          </Link>
+          <Button
+            variant="danger"
+            onClick={() => {
+              deleteGallery(gallery.id);
+            }}
+          >
+            Delete
+          </Button>
         </>
       ) : (
         ""

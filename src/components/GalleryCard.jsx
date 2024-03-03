@@ -15,7 +15,10 @@ function GalleryCard({ id, author, name, created_at, img_url }) {
         <Card.Title>{name}</Card.Title>
         <Card.Text>
           Author:{" "}
-          <Link to={`/authors/${author.id}`}>
+          <Link
+            style={{ textDecoration: "none", color: "purple" }}
+            to={`/authors/${author.id}`}
+          >
             {author.first_name + " " + author.last_name}
           </Link>{" "}
           <br />

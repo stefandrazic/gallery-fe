@@ -59,8 +59,10 @@ export default function Galleries() {
         })}
       </Container>
       {metadata.total > galleries.length && ( // Render the "Load more" button conditionally
-        <Container className="d-flex justify-content-center mt-3">
-          <Button onClick={loadMoreGalleries}>Load more</Button>
+        <Container className="d-flex justify-content-center mt-3 mb-3">
+          <Button variant="success" onClick={loadMoreGalleries}>
+            Load more
+          </Button>
         </Container>
       )}
     </Container>
