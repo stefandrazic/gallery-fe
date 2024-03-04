@@ -34,9 +34,14 @@ export default function NavbarComponent() {
             All Galleries
           </Nav.Link>
           {authToken && (
-            <Nav.Link as={Link} to={"/create"}>
-              Create Gallery
-            </Nav.Link>
+            <>
+              <Nav.Link as={Link} to={"/my-galleries"}>
+                My Galleries
+              </Nav.Link>
+              <Nav.Link as={Link} to={"/create"}>
+                Create Gallery
+              </Nav.Link>
+            </>
           )}
         </Nav>
         <Nav>

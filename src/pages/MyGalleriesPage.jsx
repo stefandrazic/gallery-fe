@@ -3,11 +3,19 @@ import { Button, Container, Form } from "react-bootstrap";
 import useGalleries from "../hooks/useGalleries";
 import Loading from "../components/Loading";
 import GalleryCard from "../components/GalleryCard";
+import { useAuth } from "../context/auth";
+import { useParams } from "react-router-dom";
 
-export default function Galleries() {
+export default function MyGalleries() {
+  const { authToken, user } = useAuth();
+  const { id } = useParams();
+  let author = null;
+
+  id ? (author = id) : (author = user.id);
+
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
-  const { galleries, metadata } = useGalleries(page, search);
+  const { galleries, metadata } = useGalleries(page, search, author);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,7 +43,7 @@ export default function Galleries() {
 
   return (
     <Container className="mt-2">
-      <h1>All Galleries</h1>
+      <h1>My Galleries</h1>
       <Container>
         <Form
           className="mb-3 mt-3"

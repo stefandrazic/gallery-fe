@@ -1,7 +1,7 @@
 import HttpService from "./Http.service";
 
 export default class GalleriesService extends HttpService {
-  static async getAll(page = 1, search = "") {
+  static async getAll(page = 1, search = "", userId) {
     const response = await this.request({
       method: "GET",
       url: "/galleries",
@@ -9,6 +9,7 @@ export default class GalleriesService extends HttpService {
         perPage: 10,
         page,
         search,
+        userId,
       },
     });
     return { data: response.data, metadata: response.metadata };

@@ -56,7 +56,10 @@ export default function Gallery() {
       <h2>Gallery name: {gallery.name}</h2>
       <h4>
         Author:{" "}
-        <Link style={{ textDecoration: "none", color: "purple" }} to={"/"}>
+        <Link
+          style={{ textDecoration: "none", color: "purple" }}
+          to={`/authors/${gallery.author.id}`}
+        >
           {gallery.author.first_name + " " + gallery.author.last_name}
         </Link>
       </h4>

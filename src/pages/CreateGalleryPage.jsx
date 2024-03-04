@@ -71,6 +71,16 @@ export default function CreateGalleryPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Validate image URLs
+    const areUrlsValid = formData.img_urls.every((url) =>
+      /\.(jpg|png|jpeg)$/.test(url.toLowerCase())
+    );
+
+    if (!areUrlsValid) {
+      // Display error message or take appropriate action
+      console.log("Invalid image URL format. Must be format JPG, PNG or JPEG");
+      return;
+    }
     const joinedUrls = formData.img_urls.join(",");
 
     const newData = {
@@ -166,7 +176,7 @@ export default function CreateGalleryPage() {
         </Form.Group>
 
         <Button variant="primary" type="submit">
-          Create
+          {!id ? "Create" : "Edit"}
         </Button>
         <Button variant="secondary">Cancel</Button>
       </Form>
