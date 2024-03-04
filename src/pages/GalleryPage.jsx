@@ -6,15 +6,16 @@ import NotFound from "./NotFound";
 import Loading from "../components/Loading";
 import { useAuth } from "../context/auth";
 import GalleriesService from "../services/galleries.service";
+import CommentCard from "../components/CommentCard";
+import CreateComment from "../components/CreateComment";
 
 export default function Gallery() {
   const { id } = useParams();
   const { gallery, images } = useGallery(id);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
   const navigate = useNavigate();
-
+  const { authToken, user } = useAuth();
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -117,6 +118,19 @@ export default function Gallery() {
           );
         })}
       </Carousel>
+      {user ? <CreateComment gallery_id={gallery.id} /> : "uloguj se majmunee"}
+      <h3>Comments:</h3>
+      {gallery.comments.map((comment) => {
+        return (
+          <CommentCard
+            key={comment.id}
+            id={comment.id}
+            author={comment.author}
+            content={comment.content}
+            created_at={comment.created_at}
+          />
+        );
+      })}
     </Container>
   );
 }

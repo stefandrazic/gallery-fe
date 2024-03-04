@@ -33,9 +33,10 @@ export default function RegisterPage() {
           email: formData.email,
           password: formData.password,
         });
-        setLogin(loginResponse.token);
         localStorage.setItem("user", JSON.stringify(loginResponse.user));
         localStorage.setItem("token", loginResponse.token);
+        setLogin(loginResponse.token);
+
         console.log(loginResponse.token);
         setFormData(DEFAULT_DATA);
       }
