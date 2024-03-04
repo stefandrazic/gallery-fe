@@ -1,13 +1,14 @@
 import HttpService from "./Http.service";
 
 export default class GalleriesService extends HttpService {
-  static async getAll(page = 1) {
+  static async getAll(page = 1, search = "") {
     const response = await this.request({
       method: "GET",
       url: "/galleries",
       params: {
         perPage: 10,
         page,
+        search,
       },
     });
     return { data: response.data, metadata: response.metadata };

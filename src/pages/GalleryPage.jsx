@@ -70,7 +70,13 @@ export default function Gallery() {
           <Button
             variant="danger"
             onClick={() => {
-              deleteGallery(gallery.id);
+              if (
+                window.confirm(
+                  `Are you sure you want to delete ${gallery.name} gallery?`
+                )
+              ) {
+                deleteGallery(gallery.id);
+              }
             }}
           >
             Delete

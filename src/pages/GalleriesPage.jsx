@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import useQuery from "../hooks/useQuery";
 import useGalleries from "../hooks/useGalleries";
-import { Link } from "react-router-dom";
 import Loading from "../components/Loading";
 import GalleryCard from "../components/GalleryCard";
 
 export default function Galleries() {
-  const query = useQuery();
   const [page, setPage] = useState(1);
-  const { galleries, metadata } = useGalleries(page);
+  const [search, setSearch] = useState("");
+  const { galleries, metadata } = useGalleries(page, search);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -21,51 +19,71 @@ export default function Galleries() {
   }, []);
 
   if (loading) {
-    return <Loading />; // You can show a loader here if needed
-  }
-
-  if (galleries.length < 1) {
-    return <Container>No movies found</Container>;
+    return <Loading />;
   }
 
   const loadMoreGalleries = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    const searchValue = event.target.elements.search.value;
+    setPage(1);
+    setSearch(searchValue);
+  };
+
   return (
     <Container className="mt-2">
-      <Container
-        className="mb-3 mt-3"
-        style={{ display: "flex", gap: "0.5rem" }}
-      >
-        <Form.Control size="lg" type="text" placeholder="Search" />
-        <Button variant="success">Search</Button>
-      </Container>
-      <Container
-        className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mx-auto"
-        style={{ gap: "1rem" }}
-      >
-        {galleries?.map((gallery) => {
-          return (
-            <GalleryCard
-              key={gallery.id}
-              id={gallery.id}
-              name={gallery.name}
-              author={gallery.author}
-              created_at={gallery.created_at}
-              img_url={gallery.img_urls.split(",")[0]}
-            />
-          );
-        })}
-      </Container>
-      {metadata.total > galleries.length && ( // Render the "Load more" button conditionally
-        <Container className="d-flex justify-content-center mt-3 mb-3">
-          <Button variant="success" onClick={loadMoreGalleries}>
-            Load more
+      <Container>
+        <Form
+          className="mb-3 mt-3"
+          style={{ display: "flex", gap: "0.5rem" }}
+          onSubmit={handleSearch}
+        >
+          <Form.Control
+            size="lg"
+            type="text"
+            placeholder="Search"
+            name="search"
+          />
+          <Button type="submit" variant="success">
+            Search
           </Button>
+        </Form>
+      </Container>
+      {galleries.length < 1 ? (
+        <Container>
+          <h2>No movies found</h2>
         </Container>
+      ) : (
+        <>
+          <Container
+            className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mx-auto"
+            style={{ gap: "1rem" }}
+          >
+            {galleries?.map((gallery) => {
+              return (
+                <GalleryCard
+                  key={gallery.id}
+                  id={gallery.id}
+                  name={gallery.name}
+                  author={gallery.author}
+                  created_at={gallery.created_at}
+                  img_url={gallery.img_urls.split(",")[0]}
+                />
+              );
+            })}
+          </Container>
+          {metadata.total > galleries.length && ( // Render the "Load more" button conditionally
+            <Container className="d-flex justify-content-center mt-3 mb-3">
+              <Button variant="success" onClick={loadMoreGalleries}>
+                Load more
+              </Button>
+            </Container>
+          )}
+        </>
       )}
     </Container>
   );
 }
-<Link to={`/?page=2`}>2</Link>;
