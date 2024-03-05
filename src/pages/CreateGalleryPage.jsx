@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Form, Button, Row, Col } from "react-bootstrap";
+import { Container, Form, Button, Row, Col, Alert } from "react-bootstrap";
 import GalleriesService from "../services/galleries.service";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../context/auth";
@@ -13,9 +13,13 @@ export default function CreateGalleryPage() {
     description: "",
     img_urls: [""],
   });
+  const DEFAULT_DATA = { name: "", description: "", img_urls: [""] };
+  const [urlError, setUrlError] = useState("");
 
   useEffect(() => {
-    if (id) {
+    if (!id) {
+      setFormData(DEFAULT_DATA);
+    } else {
       fetchGalleryData(id);
     }
   }, [id]);
@@ -29,7 +33,6 @@ export default function CreateGalleryPage() {
         setFormData({ name, description, img_urls: img_urls.split(",") });
         return response;
       } else {
-        console.log("This is not your gallery!");
         navigate("/");
       }
     } catch (error) {
@@ -73,12 +76,12 @@ export default function CreateGalleryPage() {
     event.preventDefault();
     // Validate image URLs
     const areUrlsValid = formData.img_urls.every((url) =>
-      /\.(jpg|png|jpeg)$/.test(url.toLowerCase())
+      /\.(jpg|png|jpeg)/i.test(url.toLowerCase())
     );
 
     if (!areUrlsValid) {
       // Display error message or take appropriate action
-      console.log("Invalid image URL format. Must be format JPG, PNG or JPEG");
+      setUrlError("Invalid image URL format. Must be format JPG, PNG or JPEG");
       return;
     }
     const joinedUrls = formData.img_urls.join(",");
@@ -90,12 +93,9 @@ export default function CreateGalleryPage() {
 
     try {
       if (id && user.id) {
-        const response = await GalleriesService.edit(id, newData);
-        console.log(response);
-        console.log(newData);
+        await GalleriesService.edit(id, newData);
       } else {
-        const response = await GalleriesService.create(newData);
-        console.log(response);
+        await GalleriesService.create(newData);
       }
       navigate("/");
     } catch (error) {
@@ -170,6 +170,11 @@ export default function CreateGalleryPage() {
               </Col>
             </Row>
           ))}
+          {urlError && (
+            <Alert className="mt-3" style={{ border: 0 }} variant="danger">
+              {urlError}
+            </Alert>
+          )}
           <Button variant="secondary" onClick={handleAddUrl}>
             Add another URL
           </Button>
@@ -178,7 +183,14 @@ export default function CreateGalleryPage() {
         <Button variant="primary" type="submit">
           {!id ? "Create" : "Edit"}
         </Button>
-        <Button variant="secondary">Cancel</Button>
+        <Button
+          onClick={() => {
+            navigate("/");
+          }}
+          variant="secondary"
+        >
+          Cancel
+        </Button>
       </Form>
     </Container>
   );

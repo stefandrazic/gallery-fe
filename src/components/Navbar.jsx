@@ -11,8 +11,6 @@ export default function NavbarComponent() {
   const logout = async () => {
     try {
       const response = await AuthService.logout();
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
 
       if (response) {
         setLogout();
@@ -55,7 +53,11 @@ export default function NavbarComponent() {
               </Nav.Link>
             </>
           )}
-
+          {authToken && (
+            <Nav.Link as={Link} to={`/my-galleries`}>
+              {user.first_name + " " + user.last_name}
+            </Nav.Link>
+          )}
           {authToken && (
             <Nav.Link as={Button} onClick={() => logout()}>
               Logout

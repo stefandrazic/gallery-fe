@@ -9,4 +9,12 @@ export default class CommentsService extends HttpService {
     });
     return response?.data;
   }
+
+  static async delete(id) {
+    const response = await this.request({
+      method: "DELETE",
+      url: `/comments/${id}`,
+    });
+    return response;
+  }
 }

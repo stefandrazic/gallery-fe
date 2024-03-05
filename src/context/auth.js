@@ -1,13 +1,25 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(null);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
+  const [changed, setChanged] = useState(false);
 
-  const setLogin = (token) => {
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      setAuthToken(localStorage.getItem("token"));
+    }
+    if (localStorage.getItem("user")) {
+      setUser(JSON.parse(localStorage.getItem("user")));
+    }
+  }, []);
+
+  const setAuth = (token, user) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
     setAuthToken(token);
-    setUser(JSON.parse(localStorage.getItem("user")));
+    setUser(user);
   };
 
   const setLogout = () => {
@@ -15,9 +27,21 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const change = () => {
+    setChanged(!changed);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ authToken, setLogin, setLogout, user, setUser }}
+      value={{
+        authToken,
+        setAuth,
+        setLogout,
+        user,
+        setUser,
+        change,
+        changed,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -3,7 +3,7 @@ import { Alert, Container } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import AuthService from "../../services/auth.service";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 const DEFAULT_DATA = {
   first_name: "",
@@ -15,7 +15,7 @@ const DEFAULT_DATA = {
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const { setLogin } = useAuth();
+  const { setAuth } = useAuth();
   const [formData, setFormData] = useState({
     DEFAULT_DATA,
   });
@@ -26,18 +26,13 @@ export default function RegisterPage() {
     try {
       setErrors(DEFAULT_DATA);
       const response = await AuthService.register(formData);
-      console.log(response);
       navigate("/");
       if (response) {
         const loginResponse = await AuthService.login({
           email: formData.email,
           password: formData.password,
         });
-        localStorage.setItem("user", JSON.stringify(loginResponse.user));
-        localStorage.setItem("token", loginResponse.token);
-        setLogin(loginResponse.token);
-
-        console.log(loginResponse.token);
+        setAuth(loginResponse.token, loginResponse.user);
         setFormData(DEFAULT_DATA);
       }
     } catch (error) {

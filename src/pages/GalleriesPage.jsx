@@ -49,7 +49,7 @@ export default function Galleries() {
             name="search"
           />
           <Button type="submit" variant="success">
-            Search
+            Filter
           </Button>
         </Form>
       </Container>

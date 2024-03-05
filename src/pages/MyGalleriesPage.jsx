@@ -7,12 +7,11 @@ import { useAuth } from "../context/auth";
 import { useParams } from "react-router-dom";
 
 export default function MyGalleries() {
-  const { authToken, user } = useAuth();
+  const { user } = useAuth();
   const { id } = useParams();
   let author = null;
 
   id ? (author = id) : (author = user.id);
-
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const { galleries, metadata } = useGalleries(page, search, author);
@@ -57,7 +56,7 @@ export default function MyGalleries() {
             name="search"
           />
           <Button type="submit" variant="success">
-            Search
+            Filter
           </Button>
         </Form>
       </Container>

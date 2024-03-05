@@ -3,7 +3,7 @@ import GalleriesService from "../services/galleries.service";
 
 export default function useGalleries(page, search, userId) {
   const [galleries, setGalleries] = useState([]);
-  const [metadata, setMetadata] = useState({ total: 0, count: 0, perPage: 8 });
+  const [metadata, setMetadata] = useState({ total: 0, count: 0, perPage: 10 });
 
   useEffect(() => {
     fetchGalleries(search);

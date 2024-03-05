@@ -15,12 +15,11 @@ export default function Gallery() {
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { authToken, user } = useAuth();
+  const { user } = useAuth();
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -43,7 +42,6 @@ export default function Gallery() {
   const deleteGallery = async (id) => {
     try {
       const response = await GalleriesService.delete(id);
-      console.log(response);
       if (response) navigate("/");
     } catch (error) {
       console.log(error);
@@ -68,7 +66,7 @@ export default function Gallery() {
       <h5>Description: {gallery.description}</h5>
       {user && user.id === gallery.author.id ? (
         <>
-          <Link to={`/edit/${gallery.id}`}>
+          <Link to={`/edit-gallery/${gallery.id}`}>
             <Button variant="info">Edit</Button>
           </Link>
           <Button
@@ -98,7 +96,7 @@ export default function Gallery() {
                 style={{
                   position: "relative",
                   width: "100%",
-                  height: "60vh",
+                  height: "80vh",
                 }}
               >
                 <Link to={img} target="_blank">
@@ -118,19 +116,34 @@ export default function Gallery() {
           );
         })}
       </Carousel>
-      {user ? <CreateComment gallery_id={gallery.id} /> : "uloguj se majmunee"}
-      <h3>Comments:</h3>
-      {gallery.comments.map((comment) => {
-        return (
-          <CommentCard
-            key={comment.id}
-            id={comment.id}
-            author={comment.author}
-            content={comment.content}
-            created_at={comment.created_at}
-          />
-        );
-      })}
+      {!gallery || Object.keys(gallery.comments).length === 0 ? (
+        <h3>Be first to comment on this gallery</h3>
+      ) : (
+        <h3>Comments:</h3>
+      )}
+      <Container
+        className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3 mx-auto mb-3"
+        style={{ gap: "1rem" }}
+      >
+        {gallery.comments
+          ?.sort((a, b) => b.id - a.id)
+          .map((comment) => {
+            return (
+              <CommentCard
+                key={comment.id}
+                id={comment.id}
+                author={comment.author}
+                content={comment.content}
+                created_at={comment.created_at}
+              />
+            );
+          })}
+      </Container>
+      {user ? (
+        <CreateComment gallery_id={gallery.id} />
+      ) : (
+        <h5>Log in to leave a comment</h5>
+      )}
     </Container>
   );
 }

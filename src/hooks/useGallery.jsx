@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import GalleriesService from "../services/galleries.service";
+import { useAuth } from "../context/auth";
 
 export default function useGallery(id) {
   const [gallery, setGallery] = useState({});
   const [images, setImages] = useState([]);
+  const { changed } = useAuth();
   useEffect(() => {
     fetchGallery();
-  }, [id]);
+  }, [id, changed]);
 
   async function fetchGallery() {
     try {

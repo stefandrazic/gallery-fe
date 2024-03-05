@@ -24,7 +24,7 @@ export default function router() {
 
       <Route element={<PrivateRoutes />}>
         <Route path="/create" element={<CreateGalleryPage />} />
-        <Route path="/edit/:id" element={<CreateGalleryPage />} />
+        <Route path="/edit-gallery/:id" element={<CreateGalleryPage />} />
         <Route path="my-galleries" element={<MyGalleriesPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />

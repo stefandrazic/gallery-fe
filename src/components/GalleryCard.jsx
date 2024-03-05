@@ -12,11 +12,16 @@ function GalleryCard({ id, author, name, created_at, img_url }) {
         style={{ height: "180px", objectFit: "cover" }}
       />
       <Card.Body>
-        <Card.Title>{name}</Card.Title>
+        <Link
+          style={{ textDecoration: "none", color: "green" }}
+          to={`/galleries/${id}`}
+        >
+          <Card.Title>{name}</Card.Title>
+        </Link>
         <Card.Text>
           Author:{" "}
           <Link
-            style={{ textDecoration: "none", color: "purple" }}
+            style={{ textDecoration: "none", color: "blue" }}
             to={`/authors/${author.id}`}
           >
             {author.first_name + " " + author.last_name}
