@@ -55,7 +55,7 @@ export default function Galleries() {
       </Container>
       {galleries.length < 1 ? (
         <Container>
-          <h2>No movies found</h2>
+          <h2>No galleries found</h2>
         </Container>
       ) : (
         <>
