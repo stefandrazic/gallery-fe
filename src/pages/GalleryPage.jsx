@@ -8,6 +8,7 @@ import { useAuth } from "../context/auth";
 import GalleriesService from "../services/galleries.service";
 import CommentCard from "../components/CommentCard";
 import CreateComment from "../components/CreateComment";
+import LikesService from "../services/likes.service";
 
 export default function Gallery() {
   const { id } = useParams();
@@ -16,6 +17,10 @@ export default function Gallery() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { change } = useAuth();
+  const LIKE_DATA = {
+    gallery_id: gallery.id,
+  };
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -48,6 +53,24 @@ export default function Gallery() {
     }
   };
 
+  const likeGallery = async () => {
+    try {
+      const response = await LikesService.like(LIKE_DATA);
+      if (response) change();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const dislikeGallery = async () => {
+    try {
+      const response = await LikesService.dislike(LIKE_DATA);
+      if (response) change();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const time = new Date(gallery.created_at).toJSON().slice(0, 10);
 
   return (
@@ -64,6 +87,20 @@ export default function Gallery() {
       </h4>
       <h5>Created at: {String(time)}</h5>
       <h5>Description: {gallery.description}</h5>
+      <h5>
+        Likes : <span style={{ color: "blue" }}>{gallery.like_count}</span>{" "}
+        Dislikes : <span style={{ color: "red" }}>{gallery.dislike_count}</span>
+      </h5>
+      {user && (
+        <>
+          <Button onClick={() => likeGallery()} variant="info">
+            Like
+          </Button>{" "}
+          <Button onClick={() => dislikeGallery()} variant="danger">
+            Dislike
+          </Button>
+        </>
+      )}
       {user && user.id === gallery.author.id ? (
         <>
           <Link to={`/edit-gallery/${gallery.id}`}>
@@ -87,7 +124,6 @@ export default function Gallery() {
       ) : (
         ""
       )}
-
       <Carousel className="mt-2" activeIndex={index} onSelect={handleSelect}>
         {images?.map((img, i) => {
           return (
